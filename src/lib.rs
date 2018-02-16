@@ -47,7 +47,7 @@ pub struct Request {
     /// Remote identity authenticated by the server (`REMOTE_IDENT`).
     ident: Option<String>,
     /// Authentication type used (`AUTH_TYPE`).
-    auth_type: String,
+    auth: Option<String>,
     /// Client connection information (`REMOTE_HOST`).
     client: net::Ipv4Addr,
     /// Processed content from POST or PUT,
@@ -74,3 +74,43 @@ impl Request {
         unimplemented!()
     }
 }
+
+impl Default for Request {
+    fn default() -> Request {
+        Request {
+            http_version: "HTTP/1.0".to_string(),
+            cgi_version: "CGI/1.1".to_string(),
+            method: Method::Get,
+            full_url: unimplemented!(), // File url to script.
+            path_info: None,
+            path_translated: None,
+            script: unimplemented!(), // Relatice path to script
+            user: None,
+            ident: None,
+            auth: None,
+            client: unimplemented!(), // localhost
+            content: None,
+            query: "".to_string(),
+        }
+    }
+}
+
+/// Build queries from components.
+///
+/// Useful for creating dummy queries for tests.
+pub struct Builder {
+    request: Request,
+}
+
+impl Builder {
+    /// Create a new request builder.
+    fn new() -> Builder {
+        Builder { request: Request::default() }
+    }
+
+    /// Build into actual request.
+    fn build(self) -> Request {
+        self.request
+    }
+}
+
