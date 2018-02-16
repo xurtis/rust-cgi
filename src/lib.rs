@@ -2,6 +2,9 @@
 //! It also provides tools to emulate that environment from the command line
 //! that get built into the generated binary.
 
+#![deny(unused_must_use)]
+#![deny(missing_docs)]
+
 extern crate mime;
 extern crate url;
 
@@ -14,6 +17,8 @@ use std::net;
 use std::sync::atomic::{AtomicBool, Ordering};
 use url::Url;
 
+/// HTTP compliant method names.
+#[allow(missing_docs)]
 #[derive(PartialEq, Eq, Clone, Copy)]
 pub enum Method {
     Options,
@@ -173,15 +178,15 @@ impl Builder {
     }
 
     /// Set the server hostname.
-    pub fn host(mut self, host: &str) -> Builder {
-        self.request.full_url.set_host(Some(host));
-        self
+    pub fn host(mut self, host: &str) -> CgiResult<Builder> {
+        self.request.full_url.set_host(Some(host))?;
+        Ok(self)
     }
 
     /// Set the server port and change the schema to http.
     pub fn port(mut self, port: u16) -> Builder {
-        self.request.full_url.set_scheme("http");
-        self.request.full_url.set_port(Some(port));
+        self.request.full_url.set_scheme("http").expect("Could not set url scheme");
+        self.request.full_url.set_port(Some(port)).expect("Could not set port");
         self
     }
 
@@ -252,7 +257,7 @@ mod test {
     #[test]
     fn build_url() {
         let request = Builder::new()
-            .host("jabberwocky")
+            .host("jabberwocky").unwrap()
             .port(81)
             .script("/test.cgi")
             .path_info("/var/www/html", "/some/info")
