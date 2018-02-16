@@ -1,6 +1,17 @@
 [package]
 name = "cgi"
+description = "Create CGI binaries using rust."
 version = "0.1.0"
 authors = ["Curtis Millar <curtis@curtism.me>"]
+license = "ISC"
+repository = "https://github.com/xurtis/rust-cgi"
+readme = "README.md"
+keywords = ["cgi", "web", "script"]
+categories = [
+	"command-line-utilities",
+	"network-programming",
+	"web-programming",
+]
+
 
 [dependencies]
